@@ -110,7 +110,7 @@ def sarsa(env, alpha=0.1, gamma=0.9, epsilon=0.1, num_ep=int(1e4)):
         a = choose_abs_greedy_action(s, Q, epsilon)
         while not done:
             s_, r, done, _ = env.step(a)
-            a_ = choose_abs_greedy_action(s, Q, epsilon)
+            a_ = choose_abs_greedy_action(s_, Q, epsilon)
             #update Q using sarsa
             Q[s, a] = Q[s, a] + alpha * (r + (gamma * Q[s_,a_]) - Q[s,a])
             s = s_
