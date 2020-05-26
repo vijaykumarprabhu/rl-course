@@ -99,8 +99,8 @@ def max_action_state(state, Q):
 
 
 def sarsa(env, alpha=0.1, gamma=0.9, epsilon=0.1, num_ep=int(1e4)):
-    Q = np.zeros((env.observation_space.n,  env.action_space.n))
-
+    #Q = np.zeros((env.observation_space.n,  env.action_space.n))
+    Q = np.random.rand(env.observation_space.n,  env.action_space.n)
     # TODO: implement the sarsa algorithm
 
     # This is some starting point performing random walks in the environment:
@@ -119,7 +119,8 @@ def sarsa(env, alpha=0.1, gamma=0.9, epsilon=0.1, num_ep=int(1e4)):
 
 
 def qlearning(env, alpha=0.1, gamma=0.9, epsilon=0.1, num_ep=int(1e4)):
-    Q = np.zeros((env.observation_space.n,  env.action_space.n))
+    #Q = np.zeros((env.observation_space.n,  env.action_space.n))
+    Q = np.random.rand(env.observation_space.n,  env.action_space.n)
     # TODO: implement the qlearning algorithm
 
     for i in range(num_ep):
