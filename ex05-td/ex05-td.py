@@ -85,6 +85,18 @@ def plot_Q(Q, env):
     plt.xticks([])
     plt.yticks([])
 
+def choose_abs_greedy_action(state, Q, epsilon):
+	action = None
+	if np.random.uniform(0, 1) < epsilon:
+		action = np.random.randint(env.action_space.n)
+	else:
+		action = np.argmax(Q[state,:])
+	return action
+
+def max_action_state(state, Q):
+	action = np.argmax(Q[state,:])
+	return Q[state, action]
+
 
 def sarsa(env, alpha=0.1, gamma=0.9, epsilon=0.1, num_ep=int(1e4)):
     Q = np.zeros((env.observation_space.n,  env.action_space.n))
@@ -95,15 +107,31 @@ def sarsa(env, alpha=0.1, gamma=0.9, epsilon=0.1, num_ep=int(1e4)):
     for i in range(num_ep):
         s = env.reset()
         done = False
+        a = choose_abs_greedy_action(s, Q, epsilon)
         while not done:
-            a = np.random.randint(env.action_space.n)
             s_, r, done, _ = env.step(a)
+            a_ = choose_abs_greedy_action(s, Q, epsilon)
+            #update Q using sarsa
+            Q[s, a] = Q[s, a] + alpha * (r + (gamma * Q[s_,a_]) - Q[s,a])
+            s = s_
+            a = a_
     return Q
 
 
 def qlearning(env, alpha=0.1, gamma=0.9, epsilon=0.1, num_ep=int(1e4)):
     Q = np.zeros((env.observation_space.n,  env.action_space.n))
     # TODO: implement the qlearning algorithm
+
+    for i in range(num_ep):
+        s = env.reset()
+        done = False
+        while not done:
+            a = choose_abs_greedy_action(s, Q, epsilon)
+            s_, r, done, _ = env.step(a)
+            #update Q using Q learning
+
+            Q[s, a] = Q[s, a] + alpha * (r+ ( gamma * max_action_state(s_, Q)) - Q[s,a] )
+            s = s_
     return Q
 
 
